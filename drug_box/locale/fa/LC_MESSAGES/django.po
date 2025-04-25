@@ -1,0 +1,124 @@
+# Persian translations for Django admin interface
+msgid ""
+msgstr ""
+"Project-Id-Version: drug_box\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-03-21 12:00+0330\n"
+"PO-Revision-Date: 2024-03-21 12:00+0330\n"
+"Last-Translator: \n"
+"Language-Team: Persian\n"
+"Language: fa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+# Admin interface translations
+msgid "User"
+msgstr "کاربر"
+
+msgid "Users"
+msgstr "کاربران"
+
+msgid "Dosage Schedule"
+msgstr "برنامه مصرف دارو"
+
+msgid "Dosage Schedules"
+msgstr "برنامه‌های مصرف دارو"
+
+msgid "Event Log"
+msgstr "گزارش رویداد"
+
+msgid "Event Logs"
+msgstr "گزارش‌های رویداد"
+
+msgid "Name"
+msgstr "نام"
+
+msgid "RFID Code"
+msgstr "کد RFID"
+
+msgid "Fingerprint ID"
+msgstr "شناسه اثر انگشت"
+
+msgid "Date"
+msgstr "تاریخ"
+
+msgid "Dosage"
+msgstr "مقدار مصرف"
+
+msgid "Event Type"
+msgstr "نوع رویداد"
+
+msgid "Status"
+msgstr "وضعیت"
+
+msgid "Event Time"
+msgstr "زمان رویداد"
+
+msgid "Message"
+msgstr "پیام"
+
+# Common admin actions
+msgid "Add"
+msgstr "افزودن"
+
+msgid "Change"
+msgstr "ویرایش"
+
+msgid "Delete"
+msgstr "حذف"
+
+msgid "Save"
+msgstr "ذخیره"
+
+msgid "Cancel"
+msgstr "انصراف"
+
+msgid "Search"
+msgstr "جستجو"
+
+msgid "Filter"
+msgstr "فیلتر"
+
+# Admin messages
+msgid "Successfully saved."
+msgstr "با موفقیت ذخیره شد."
+
+msgid "Please correct the error below."
+msgstr "لطفا خطای زیر را اصلاح کنید."
+
+msgid "Please correct the errors below."
+msgstr "لطفا خطاهای زیر را اصلاح کنید."
+
+# Model fields
+msgid "User name"
+msgstr "نام کاربر"
+
+msgid "RFID code"
+msgstr "کد RFID"
+
+# Admin site
+msgid "Drug Box Administration"
+msgstr "پنل مدیریت Drug Box"
+
+msgid "Site administration"
+msgstr "مدیریت دستگاه"
+
+msgid "Welcome,"
+msgstr "خوش آمدید،"
+
+msgid "View site"
+msgstr "مشاهده سایت"
+
+msgid "Log out"
+msgstr "خروج"
+
+msgid "Password"
+msgstr "رمز عبور"
+
+msgid "Username"
+msgstr "نام کاربری"
+
+msgid "Login"
+msgstr "ورود" 
