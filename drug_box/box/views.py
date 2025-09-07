@@ -2,11 +2,12 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from django.db import transaction
 from .models import User, DosageSchedule, EventLog
 
-def log_event(user, rfid_code, fingerprint_id, status_, message):
+def log_event(user, rfid_code, fingerprint_id, status_, message, type):
     EventLog.objects.create(
-        event_type="Authentication",
+        event_type=type,
         user=user,
         rfid_code=rfid_code,
         fingerprint_id=fingerprint_id,
@@ -19,29 +20,32 @@ class HandleRequestAPIView(APIView):
         rfid = request.data.get("rfid_code")
         fp = request.data.get("fingerprint_id")
         ts = request.data.get("timestamp")
-        
+
+        event_type = "HANDLE_REQUEST"
         if not (rfid and fp and ts):
-            log_event(None, rfid, fp, "Failed", "Missing required fields")
+            log_event(None, rfid, fp, "Failed", "Missing required fields", event_type)
             return Response({"message":"Missing required fields"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             user = User.objects.get(rfid_code=rfid)
         except User.DoesNotExist:
-            log_event(None, rfid, fp, "Failed", "RFID not found")
+            log_event(None, rfid, fp, "Failed", "RFID not found", event_type)
             return Response({"message":"RFID not found"}, status=status.HTTP_404_NOT_FOUND)
 
         if user.fingerprint_id != int(fp):
-            log_event(user, rfid, fp, "Failed", "Fingerprint mismatch")
+            log_event(user, rfid, fp, "Failed", "Fingerprint mismatch", event_type)
             return Response({"message":"Fingerprint mismatch"}, status=status.HTTP_401_UNAUTHORIZED)
 
         date = ts.split("T")[0]
         try:
-            dosage_obj = DosageSchedule.objects.get(user=user, date=date)
+            dosage_obj = DosageSchedule.objects.get(user=user, date=date, used=False)
+            dosage_obj.used = True
+            DosageSchedule.save(dosage_obj)
         except DosageSchedule.DoesNotExist:
-            log_event(user, rfid, fp, "Failed", "No dosage for date")
+            log_event(user, rfid, fp, "Failed", "No dosage for date", event_type)
             return Response({"message":"No dosage defined for the specified date"}, status=status.HTTP_403_FORBIDDEN)
 
-        log_event(user, rfid, fp, "Success", "Authentication successful, dosage sent")
+        log_event(user, rfid, fp, "Success", "Authentication successful, dosage sent", event_type)
         return Response({
             "status":"success",
             "dosage": dosage_obj.dosage
@@ -51,16 +55,18 @@ class AddUserFromDeviceAPIView(APIView):
     def post(self, request):
         rfid = request.data.get("rfid_code")
         fp = request.data.get("fingerprint_id")
-        
+        name = request.data.get("name")
+        event_type = "ADD_USER"
         if not (rfid and fp):
-            log_event(None, rfid, fp, "Failed", "Missing required fields for user creation")
+            log_event(None, rfid, fp, "Failed", "Missing required fields for user creation", event_type)
             return Response({"message":"Missing required fields"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            user = User.objects.create(name=None, rfid_code=rfid, fingerprint_id=fp)
+            with transaction.atomic():
+                user = User.objects.create(name=name, rfid_code=rfid, fingerprint_id=fp)
         except Exception as e:
-            log_event(None, rfid, fp, "Failed", str(e))
+            # Transaction will be rolled back automatically
             return Response({"message":"RFID or fingerprint already exists"}, status=status.HTTP_400_BAD_REQUEST)
 
-        log_event(user, rfid, fp, "Success", "User created by device")
+        log_event(user, rfid, fp, "Success", "User created by device", event_type)
         return Response({"status":"success","message":"User added successfully"}, status=status.HTTP_201_CREATED)

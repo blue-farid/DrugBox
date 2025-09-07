@@ -16,6 +16,7 @@ class DosageSchedule(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='dosage_schedules', verbose_name='کاربر')
     date = models.DateField(verbose_name='تاریخ')
     dosage = models.FloatField(verbose_name='مقدار مصرف')
+    used = models.BooleanField(verbose_name="وضعیت مصرف", default=False)
 
     class Meta:
         verbose_name = 'برنامه مصرف دارو'

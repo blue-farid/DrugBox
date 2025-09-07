@@ -9,7 +9,7 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(DosageSchedule)
 class DosageScheduleAdmin(admin.ModelAdmin):
-    list_display = ('user', 'date', 'dosage')
+    list_display = ('user', 'date', 'dosage', 'used')
     list_filter = ('date', 'user')
     search_fields = ('user__name', 'date')
     date_hierarchy = 'date'
